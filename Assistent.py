@@ -28,6 +28,8 @@ class ChatWindow(customtkinter.CTkTextbox):
 
     def add_message(self, message, sender):
         self.configure(state="normal")
+        #make sure words don't get cut off into a new line
+        self.configure(wrap=tk.WORD)
         self.insert(tk.END, message + "\n", sender)
         self.see(tk.END)
         self.configure(state="disabled")
