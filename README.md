@@ -30,16 +30,16 @@ This will launch the CustomTkinter chat GUI, where you can start interacting wit
 
 ## Dependencies
 
-The following Python packages are required to run the program:
-
-    OpenAI
-    CustomTkinter
-
 You can install these dependencies using pip:
 
-```pip install openai```
-```pip install CustomTkinter```
+```pip install -r requirements.txt```
+
+there are some unnacessary dependencies in the requirements.txt file, that I will remove in the future.
 
 ## Future Development
 
-In the future, I plan to implement memory for the personal AI assistant using embedding vectors for older messages. This will allow the assistant to provide even more helpful responses to user queries over time.
+- [ ] Memory for the personal AI assistant using embedding vectors for older messages. This will allow the assistant to provide even more helpful responses to user queries over time.
+- [ ] More string cleaning and processing to improve the visual quality of responses.
+- [ ] More robust error handling.
+- [ ] Sending with enter key.
+- [ ] Loading documents into the personal AI assistant's memory.
