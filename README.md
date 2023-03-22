@@ -43,3 +43,7 @@ there are some unnacessary dependencies in the requirements.txt file, that I wil
 - [ ] More robust error handling.
 - [x] Sending with enter key.
 - [ ] Loading documents into the personal AI assistant's memory.
+
+## Known Issues
+
+- [ ] Memory saves identical messages. and very similar ones.

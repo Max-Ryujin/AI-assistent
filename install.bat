@@ -1,7 +1,5 @@
 #!/bin/bash
 
-@echo off
-
 REM Check if Python is installed
 where python3.10 >nul 2>&1
 if %ERRORLEVEL% neq 0 (
