@@ -60,7 +60,13 @@ def get_embedding(text, model="text-embedding-ada-002"):
     embedding = openai.Embedding.create(input = [text], model=model)['data'][0]['embedding']
     return embedding
  
-
+def add_context_to_message(message):
+    message_new =  "These are messages that I sent earlier. you can use them if needed to help me: \n " 
+    context = find_relevent_messages(message)
+    for i in context:
+        message_new += i + "\n -------- \n"
+    message = message_new + "My prompt: " + message
+    return message
 
 def find_relevent_messages(message, n=3):
     """

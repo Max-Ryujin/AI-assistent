@@ -63,7 +63,7 @@ async def send_message():
     chat_history.add_message(message, "user")
 
     # Add the message to the chat history
-    message_with_context = add_context_to_message(message)
+    message_with_context = backend.add_context_to_message(message)
     print(message_with_context)
     # Save the message to the chat history
     backend.save_message(message)
@@ -73,14 +73,6 @@ async def send_message():
     
     chat_history.add_message(answer, "bot")
 
-
-def add_context_to_message(message):
-    message_new =  "These are messages that I sent earlier. you can use them if needed to help me: \n " 
-    context = backend.find_relevent_messages(message)
-    for i in context:
-        message_new += i + "\n -------- \n"
-    message = message_new + "My prompt: " + message
-    return message
     
 
 def send_message_callback():
@@ -101,7 +93,6 @@ if __name__ == "__main__":
     root.minsize(400, 700)
 
 
-
     # Creating Chat History
     chat_history = ChatWindow(root, height=500, width=400) 
     chat_history.pack(side=tk.TOP, padx=20, pady=20, fill=tk.BOTH, expand=True)
@@ -120,7 +111,6 @@ if __name__ == "__main__":
             # Creating Settings Button
     settings_button = customtkinter.CTkButton(input_frame, text="...",width=20, fg_color="grey", font=("Helvetica", 20), command=open_settings)
     settings_button.pack(side=tk.LEFT, padx=5, pady=10, ipady=6, ipadx=0)
-
 
     loop = asyncio.get_event_loop()
     thread = threading.Thread(target=start_loop, args=(loop,), daemon=True)
