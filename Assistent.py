@@ -14,10 +14,6 @@ import openai
 # Set the API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# set global variables
-systemprompt = "You are a helpful assistant."
-chatGPT_history = [{"role": "system", "content": systemprompt}]
-
 
 class ChatWindow(customtkinter.CTkTextbox):
     def __init__(self, *args, **kwargs):
@@ -47,7 +43,6 @@ async def send_message():
 
     # Save the message to the chat history
     backend.save_message(message)
-
     # Generate a response using OpenAI's chatGPT language model
     loop = asyncio.get_event_loop()
     answer = await loop.create_task(backend.chat_gpt(message))

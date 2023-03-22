@@ -3,8 +3,11 @@ import openai
 import pandas as pd
 import numpy as np
 import os
+from openai.embeddings_utils import cosine_similarity
 
-
+# set global variables
+systemprompt = "You are a helpful assistant."
+chatGPT_history = [{"role": "system", "content": systemprompt}]
 
 
 # embedding model parameters
@@ -39,14 +42,12 @@ async def chat_gpt(message):
         raise ValueError("Message cannot be empty or None")
 
     # Append message to chat history
-    chat_history = [] # assume chat history is a list of dictionaries
-    chat_history.append({"role": "user", "content": message})
-
+    chatGPT_history.append({"role": "user", "content": message})
     try:
         # Generate response using OpenAI's GPT-3 language model
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=chat_history
+            messages=chatGPT_history
         )
         return response['choices'][0]['message']['content']
     except openai.error.APIError as e:
@@ -62,7 +63,7 @@ def get_embedding(text, model="text-embedding-ada-002"):
  
 
 
-def find_relevent_messages(message):
+def find_relevent_messages(message, n=3):
     """
 
     Finds the most relevant messages in the chat history.
@@ -72,7 +73,15 @@ def find_relevent_messages(message):
     """
     # Find the most relevant messages in the chat history
     #load the chat history from history.csv file in the memory folder
-    chat_history = pd.read_csv("memory/history.csv")
+    chat_history = load_csv("memory/history.csv")
+    chat_history["embedding"] = chat_history.embedding.apply(eval).apply(np.array)
+    # Get the embedding for the message
+    message_embedding = get_embedding(message)
+
+    chat_history['similarities'] = chat_history.embedding.apply(lambda x: cosine_similarity(x, message_embedding))
+    res = chat_history.sort_values('similarities', ascending=False).head(n)
+    return res["message"].tolist()
+
 
 # Load CSV file containing messages and embeddings
 def load_csv(filename):
@@ -111,6 +120,3 @@ def save_message(message):
     # Append new data to existing data and save to CSV file
     combined_data = existing_data.append(new_data)
     combined_data.to_csv("memory/history.csv", index=False)
-
-
-save_message("hello")
