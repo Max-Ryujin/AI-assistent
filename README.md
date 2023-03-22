@@ -41,5 +41,5 @@ there are some unnacessary dependencies in the requirements.txt file, that I wil
 - [ ] Memory for the personal AI assistant using embedding vectors for older messages. This will allow the assistant to provide even more helpful responses to user queries over time.
 - [ ] More string cleaning and processing to improve the visual quality of responses.
 - [ ] More robust error handling.
-- [ ] Sending with enter key.
+- [x] Sending with enter key.
 - [ ] Loading documents into the personal AI assistant's memory.
