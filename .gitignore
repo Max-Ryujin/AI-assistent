@@ -2,3 +2,6 @@
 Assistent.spec
 \build
 \dist
+memory/history.csv
+__pycache__/backend.cpython-310.pyc
+memory/history.csv

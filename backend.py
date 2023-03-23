@@ -19,10 +19,6 @@ max_tokens = 8000  # the maximum for text-embedding-ada-002 is 8191
 
 async def chat_gpt(message):
 
-
-
-
-
     """
     Uses OpenAI's GPT-3 language model to generate a response to a given message.
 
@@ -48,7 +44,7 @@ async def chat_gpt(message):
             model="gpt-3.5-turbo",
             messages=chatGPT_history
         )
-        return response['choices'][0]['message']['content']
+        return response['choices'][0]['message']['content'] 
     except openai.error.APIError as e:
         # Handle error communicating with OpenAI API
         print(f"Error communicating with OpenAI API: {e}")
@@ -110,7 +106,6 @@ def save_message(message):
     """
     # cut the message down to 8000 tokens and only take the first 8000 tokens
     message = message[:4000]
-
     embedding = get_embedding(message)
 
     # Create DataFrame with new message and embedding
@@ -120,7 +115,13 @@ def save_message(message):
     })
 
 
-    existing_data = load_csv("memory/history.csv")
+    existing_data = pd.DataFrame(columns=["message", "embedding"])
+    #if folder and file exists, load the data from the file
+    if os.path.exists("memory/history.csv"):
+        existing_data = load_csv("memory/history.csv")
+    else:
+        #if folder and file doesn't exist, create the folder and file
+        os.makedirs("memory")
 
     # Append new data to existing data and save to CSV file
     combined_data = existing_data.append(new_data)
