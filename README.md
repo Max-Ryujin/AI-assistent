@@ -22,27 +22,16 @@ To do this:
 
 ## Running the Program
 
-To run the personal AI assistant program, simply execute the following command in your terminal:
-
-```python Assistant.py```
-
-This will launch the CustomTkinter chat GUI, where you can start interacting with the personal AI assistant.
-
-## Dependencies
-
-You can install these dependencies using pip:
-
-```pip install -r requirements.txt```
-
-there are some unnacessary dependencies in the requirements.txt file, that I will remove in the future.
+To run the personal AI assistant, simply click the Assistent application file. in the dist folder.
 
 ## Future Development
 
-- [ ] Memory for the personal AI assistant using embedding vectors for older messages. This will allow the assistant to provide even more helpful responses to user queries over time.
+- [x] Memory for the personal AI assistant using embedding vectors for older messages. This will allow the assistant to provide even more helpful responses to user queries over time.
 - [ ] More string cleaning and processing to improve the visual quality of responses.
 - [ ] More robust error handling.
 - [x] Sending with enter key.
 - [ ] Loading documents into the personal AI assistant's memory.
+- [ ] UI improvements.
 
 ## Known Issues
 
