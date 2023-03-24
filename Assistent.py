@@ -14,12 +14,16 @@ import openai
 # Set the API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+context_setting = True
+
 class ChatWindow(customtkinter.CTkTextbox):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tag_config("user", foreground="#FFC107", justify="right")
         self.tag_config("bot", foreground="#8BC34A")
         self.configure(state="disabled", font=("Helvetica", 16))
+        #set color
+        self.configure(fg_color="#1E1E1E")
 
     def add_message(self, message, sender):
         self.configure(state="normal")
@@ -31,26 +35,49 @@ class ChatWindow(customtkinter.CTkTextbox):
         self.configure(state="disabled")
 
 def open_settings():
+
     # Create a new window for settings
     settings_window = customtkinter.CTkToplevel(root)
     settings_window.title("Settings")
-    settings_window.minsize(300, 400)
+    settings_window.minsize(500, 300)
+    context_var = tk.StringVar(settings_window,value="on")
     #set spawnn location
     settings_window.geometry("+%d+%d" % (root.winfo_rootx() + 100, root.winfo_rooty() + 100))
     #place settings window on top of main window
     settings_window.transient(root)
 
-    close_button = customtkinter.CTkButton(settings_window, text="Close", command=settings_window.destroy)
-    close_button.pack(side=tk.BOTTOM,pady=10)
+    settings_window.columnconfigure(0, weight=1)
+    settings_window.columnconfigure(1, weight=3)
 
-
+    # fill the grid with a label and combobox to select the model and a checkbox to enable/disable context a input field for the api key
+    model_label = customtkinter.CTkLabel(settings_window ,text="Model:")
+    model_label.grid(row=0, column=0, padx=5, pady=5)
     dropdown = customtkinter.CTkComboBox(settings_window, values=["gpt-3.5-turbo", "gpt-4 (not available yet)"])
+    dropdown.grid(row=0, column=1, padx=5, pady=5)
+
+    def checkbox_event():
+        global context_setting #make sure the variable is global
+        if context_var.get() == "on":
+            context_setting = True
+        else:
+            context_setting = False
+
+    context_label = customtkinter.CTkLabel(settings_window, text="Enable Context:")
+    context_label.grid(row=1, column=0, padx=5, pady=5)
+    context_checkbox = customtkinter.CTkCheckBox(settings_window, command=checkbox_event , variable=context_var, onvalue="on", offvalue="off")
+    context_checkbox.grid(row=1, column=1, padx=5, pady=5)
+
+    api_label = customtkinter.CTkLabel(settings_window, text="API Key:")
+    api_label.grid(row=2, column=0, padx=5, pady=5)
+    #single line input field
+    api_key_field = customtkinter.CTkTextbox(settings_window, height=1, width=400)
+    api_key_field.grid(row=2, column=1, padx=5, pady=5)
+
+    close_button = customtkinter.CTkButton(settings_window, text="Close", command=settings_window.destroy)
+    close_button.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
 
 
-    dropdown.pack(side=tk.TOP, pady=10)
    
-
-
 
 async def send_message():
     message = input_field.get()
@@ -62,9 +89,12 @@ async def send_message():
     chat_history.add_message(message, "user")
 
     # Add the message to the chat history
-    message_with_context = backend.add_context_to_message(message)
-    # Save the message to the chat history
-    backend.save_message(message)
+    if context_setting:
+        message_with_context = backend.add_context_to_message(message)
+        # Save the message to the chat history
+        backend.save_message(message)
+    else:
+        message_with_context = message 
     # Generate a response using OpenAI's chatGPT language model
     loop = asyncio.get_event_loop()
     answer = await loop.create_task(backend.chat_gpt(message_with_context))
@@ -88,8 +118,9 @@ if __name__ == "__main__":
     root.title("AI Assistant")
 
     customtkinter.set_appearance_mode("dark")
-    root.minsize(400, 700)
-
+    root.minsize(450, 750)
+    #set color
+    root.configure(fg_color="#1E1E1E")
 
     # Creating Chat History
     chat_history = ChatWindow(root, height=500, width=400) 
@@ -108,7 +139,7 @@ if __name__ == "__main__":
     send_button.pack(side=tk.LEFT, padx=5, pady=10, ipady=6, ipadx=0)
 
     # Creating Settings Button
-    settings_button = customtkinter.CTkButton(input_frame, text="...",width=20, fg_color="grey", font=("Helvetica", 20), command=open_settings)
+    settings_button = customtkinter.CTkButton(input_frame, text="...",width=20, fg_color="dark grey", font=("Helvetica", 20), command=open_settings)
     settings_button.pack(side=tk.LEFT, padx=5, pady=10, ipady=6, ipadx=0)
 
     loop = asyncio.get_event_loop()
