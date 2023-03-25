@@ -78,7 +78,6 @@ def open_settings():
     api_key_field.pack(side=tk.TOP, padx=20, pady=20, fill=tk.X, expand=True)
     close_button.pack(side=tk.TOP, padx=20, pady=20, fill=tk.X, expand=True)
  
-
 async def send_message():
     message = input_field.get()
 
@@ -99,9 +98,7 @@ async def send_message():
     loop = asyncio.get_event_loop()
     answer = await loop.create_task(backend.chat_gpt(message_with_context))
     
-    chat_history.add_message(answer, "bot")
-
-    
+    chat_history.add_message(answer, "bot") 
 
 def send_message_callback():
     asyncio.run_coroutine_threadsafe(send_message(), loop)

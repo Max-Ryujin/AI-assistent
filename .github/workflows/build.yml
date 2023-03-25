@@ -1,0 +1,21 @@
+name: PyInstaller-Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install PyInstaller
+      run: pip install pyinstaller
+
+    - name: Build GUI with PyInstaller
+      run: pyinstaller --onefile --noconfirm --noconsole --add-data "c:\users\maxka\appdata\local\packages\pythonsoftwarefoundation.python.3.10_qbz5n2kfra8p0\localcache\local-packages\python310\site-packages/customtkinter;customtkinter/" ".\Assistent.py"
+
