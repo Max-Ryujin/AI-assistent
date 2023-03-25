@@ -126,3 +126,8 @@ def save_message(message):
     # Append new data to existing data and save to CSV file
     combined_data = existing_data.append(new_data)
     combined_data.to_csv("memory/history.csv", index=False)
+
+
+async def get_transcripe(audio_file): 
+    transcripe = openai.Audio.transcribe("whisper-1", audio_file)
+    return transcripe["text"]

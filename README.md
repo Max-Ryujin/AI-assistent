@@ -20,19 +20,20 @@ To do this:
 10. Set the variable value to your OpenAI API key.
 11. Click "OK" to save.
 
-## Running the Program
-
-To run the personal AI assistant, simply click the Assistent application file. in the dist folder.
+steps 6-11 can be replaced with the settings window (hopefully working).
 
 ## Future Development
 
 - [x] Memory for the personal AI assistant using embedding vectors for older messages. This will allow the assistant to provide even more helpful responses to user queries over time.
-- [ ] More string cleaning and processing to improve the visual quality of responses.
+- [ ] More string cleaning and processing (Markdown) to improve the visual quality of responses.
 - [ ] More robust error handling.
 - [x] Sending with enter key.
 - [ ] Loading documents into the personal AI assistant's memory.
 - [ ] UI improvements.
+- [ ] speak input (and output)
+- [x] Settings window
 
 ## Known Issues
 
 - [ ] Memory saves identical messages. and very similar ones.
+- [ ] Model selection and Context selection are not working.

@@ -39,21 +39,15 @@ def open_settings():
     # Create a new window for settings
     settings_window = customtkinter.CTkToplevel(root)
     settings_window.title("Settings")
-    settings_window.minsize(500, 300)
+    settings_window.minsize(400, 300)
     context_var = tk.StringVar(settings_window,value="on")
     #set spawnn location
     settings_window.geometry("+%d+%d" % (root.winfo_rootx() + 100, root.winfo_rooty() + 100))
     #place settings window on top of main window
     settings_window.transient(root)
 
-    settings_window.columnconfigure(0, weight=1)
-    settings_window.columnconfigure(1, weight=3)
 
-    # fill the grid with a label and combobox to select the model and a checkbox to enable/disable context a input field for the api key
-    model_label = customtkinter.CTkLabel(settings_window ,text="Model:")
-    model_label.grid(row=0, column=0, padx=5, pady=5)
     dropdown = customtkinter.CTkComboBox(settings_window, values=["gpt-3.5-turbo", "gpt-4 (not available yet)"])
-    dropdown.grid(row=0, column=1, padx=5, pady=5)
 
     def checkbox_event():
         global context_setting #make sure the variable is global
@@ -62,22 +56,28 @@ def open_settings():
         else:
             context_setting = False
 
-    context_label = customtkinter.CTkLabel(settings_window, text="Enable Context:")
-    context_label.grid(row=1, column=0, padx=5, pady=5)
-    context_checkbox = customtkinter.CTkCheckBox(settings_window, command=checkbox_event , variable=context_var, onvalue="on", offvalue="off")
-    context_checkbox.grid(row=1, column=1, padx=5, pady=5)
+    context_checkbox = customtkinter.CTkCheckBox(settings_window, command=checkbox_event , variable=context_var, onvalue="on", offvalue="off",text="Enable Context")
 
-    api_label = customtkinter.CTkLabel(settings_window, text="API Key:")
-    api_label.grid(row=2, column=0, padx=5, pady=5)
     #single line input field
-    api_key_field = customtkinter.CTkTextbox(settings_window, height=1, width=400)
-    api_key_field.grid(row=2, column=1, padx=5, pady=5)
+    api_key_field = customtkinter.CTkEntry(settings_window, height=2, width=350)
+    #check if api key is set and if so set the input field to the api key
+    if os.getenv("OPENAI_API_KEY") != None:
+        api_key_field.insert(tk.END, os.getenv("OPENAI_API_KEY"))
 
-    close_button = customtkinter.CTkButton(settings_window, text="Close", command=settings_window.destroy)
-    close_button.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
 
+    def close_event():
+        #set envirment variable to the api key
+        os.environ["OPENAI_API_KEY"] = api_key_field.get()
+        settings_window.destroy
 
-   
+    close_button = customtkinter.CTkButton(settings_window, text="Close", command=close_event)
+
+    #place widgets
+    dropdown.pack(side=tk.TOP, padx=20, pady=20, fill=tk.X, expand=True)
+    context_checkbox.pack(side=tk.TOP, padx=20, pady=20, fill=tk.X, expand=True)
+    api_key_field.pack(side=tk.TOP, padx=20, pady=20, fill=tk.X, expand=True)
+    close_button.pack(side=tk.TOP, padx=20, pady=20, fill=tk.X, expand=True)
+ 
 
 async def send_message():
     message = input_field.get()
