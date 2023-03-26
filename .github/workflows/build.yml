@@ -19,3 +19,9 @@ jobs:
     - name: Build GUI with PyInstaller
       run: pyinstaller --onefile --noconfirm --noconsole --add-data ".\build_utils/customtkinter;customtkinter/" ".\Assistent.py"
 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: AI-Assistent
+        path: dist/Assistent.exe
+
